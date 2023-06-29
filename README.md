@@ -8,6 +8,7 @@ Simple AI Game with decentralised data store on Kwil. Created for  ETHShanghai 2
 ## Technical stack and Archtecture 
 
 The architecture of the application is depicted in the image below:
+
 ![](./assets/arch.svg)
 
 Where:
