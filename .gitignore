@@ -19,3 +19,7 @@
 
 # Go workspace file
 go.work
+# Debug file
+__debug_bin
+# Face recognition models
+dnn_models
