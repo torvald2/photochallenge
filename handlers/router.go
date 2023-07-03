@@ -25,11 +25,13 @@ type RecognizeFacesResponse struct {
 func (f FaceController) GetFaceDescriptors(c *gin.Context) {
 	var payload RecognizeFacesRequest
 	var resp RecognizeFacesResponse
+	resp.Descriptor = make(map[int][]float32)
+
 	if err := c.BindJSON(&payload); err != nil {
 		c.JSON(http.StatusBadRequest, map[string]interface{}{"err": err.Error()})
 		return
 	}
-	for _, face := range payload.Faces {
+	for i, face := range payload.Faces {
 		img, err := base64.StdEncoding.DecodeString(face)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, map[string]interface{}{"err": err.Error()})
@@ -41,7 +43,7 @@ func (f FaceController) GetFaceDescriptors(c *gin.Context) {
 			return
 		}
 		for k, v := range faces {
-			resp.Descriptor[k] = v
+			resp.Descriptor[k+i] = v
 		}
 
 	}

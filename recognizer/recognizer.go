@@ -14,6 +14,7 @@ type Tokenizer struct {
 }
 
 func (t Tokenizer) GetFaces(image []byte) (descriptor map[int][]float32, err error) {
+	descriptor = make(map[int][]float32)
 	faces, err := t.rec.Recognize(image)
 	if err != nil {
 		return
