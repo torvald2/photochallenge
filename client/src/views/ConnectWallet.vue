@@ -34,13 +34,14 @@ export default {
   },
   methods:{
     connect(){
-        console.log("here")
         if (typeof window.ethereum !== "undefined") {
         ethereum
          .request({ method: "eth_requestAccounts" })
          .then((accounts) => {
            const account = accounts[0]
            this.account = account
+           this.$router.push({ name: 'create', params: {account: account }})
+
 
         }).catch((error) => {
            console.log(error, error.code);
