@@ -51,8 +51,8 @@ b-overlay(:show="loading" rounded="sm")
       p  Aww yeah, you successfully created challenge. TX hash {{ hash }}
       hr
       p 
-        | Let`s chare this challenge to your friends
-        a(href="https://localhost:8080/complete/0x1") https://localhost:8080/complete/0x1
+        | Let`s chare this challenge to your friends 
+        a(:href="complete_link") {{ complete_link }}
 
 
 
@@ -102,7 +102,7 @@ export default {
       description:"",
       hash:"",
       recordId:"",
-      saved:true,
+      saved:false,
     }
   },
   methods:{
@@ -162,6 +162,7 @@ export default {
       this.loading = false
       this.hash = tx.data.txHash
       this.recordId = recordId
+      this.saved = true
     }
   },
 
@@ -192,6 +193,9 @@ export default {
         return defaultImg
 
       }
+    },
+    complete_link(){
+      return `https://localhost:8080/complete/${this.recordId}`
     }
 
 
