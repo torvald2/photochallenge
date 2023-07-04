@@ -195,7 +195,7 @@ export default {
       }
     },
     complete_link(){
-      return `https://localhost:8080/complete/${this.recordId}`
+      return `http://localhost:8080/complete/${this.recordId}`
     }
 
 

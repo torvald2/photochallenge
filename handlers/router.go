@@ -9,6 +9,7 @@ import (
 
 type recognizer interface {
 	GetFaces(image []byte) (descriptor map[int][]float32, err error)
+	IsFacePresent(descriptor []float64, image []byte) (ok bool, err error)
 }
 
 type FaceController struct {
@@ -48,6 +49,40 @@ func (f FaceController) GetFaceDescriptors(c *gin.Context) {
 
 	}
 	c.JSON(http.StatusOK, resp)
+
+}
+
+type IsFacePresentRequest struct {
+	Faces map[int][]float64 `json:"faces"`
+	Image string            `json:"image"`
+}
+
+func (f FaceController) IsFacesPresent(c *gin.Context) {
+	var payload IsFacePresentRequest
+
+	if err := c.BindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, map[string]interface{}{"err": err.Error()})
+		return
+	}
+	img, err := base64.StdEncoding.DecodeString(payload.Image)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, map[string]interface{}{"err": err.Error()})
+		return
+	}
+	for _, face := range payload.Faces {
+
+		ok, err := f.recognizer.IsFacePresent(face, img)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, map[string]interface{}{"err": err.Error()})
+			return
+		}
+		if !ok {
+			c.JSON(http.StatusOK, map[string]interface{}{"status": "bad"})
+			return
+		}
+
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{"status": "ok"})
 
 }
 
