@@ -123,10 +123,20 @@ export default {
     },
     async recognize(){
       this.loading = true
+      let faces = []
+      if (this.file1B64 !== ""){
+        faces.push(this.file1B64.substring(23))
+      }
+      if (this.file2B64 !== ""){
+        faces.push(this.file2B64.substring(23))
+      }
+      if (this.file3B64 !== ""){
+        faces.push(this.file3B64.substring(23))
+      }
       const resp = await fetch("/api/v1/recognize",{
         method:"POST",
         body:JSON.stringify({
-          faces:[this.file1B64, this.file2B64, this.file3B64]
+          faces:faces
         }),
       })
     const data = await resp.json()

@@ -96,46 +96,33 @@ b-overlay(:show="loading" rounded="sm")
       
         async recognize(){
           this.loading = true
-          const resp = await fetch("/api/v1/recognize",{
+          const resp = await fetch("/api/v1/compare",{
             method:"POST",
             body:JSON.stringify({
-              faces:[this.file1B64, this.file2B64, this.file3B64]
+              image: this.fileB64.substring(23),
+              faces: JSON.parse(this.faces)
             }),
           })
         const data = await resp.json()
         if (resp.status !==200) {
+            this.loading = false
             console.log("Bad status code")
         } else {
-          this.faces = data.descriptors
-    
+            this.loading = false
+            this.result = data.status
+            const inputs = new Utils.ActionInput()
+            inputs.put("$id",this.challenge)
+
+      const actionTx = await kwil
+        .actionBuilder()
+        .dbid(dbid)
+        .name("complete_challenge")
+        .concat(inputs)
+        .signer(signer)
+        .buildTx();
+        await kwil.broadcast(actionTx)
+      
         }
-        this.recognizeButtonText = `Recognized ${Object.keys(this.faces).length} faces`
-        this.loading = false
-        this.recognzed = true
-        },
-        async createChallenge(){
-          this.loading = true
-          const inputs = new Utils.ActionInput()
-          let recordId = uuidv4();
-          inputs.put("$id",recordId)
-          inputs.put("$faces_data", JSON.stringify(this.faces))
-          inputs.put("$desription", this.desription)
-          inputs.put("$completed",0)
-          inputs.put("$complete_account","")
-    
-          const actionTx = await kwil
-            .actionBuilder()
-            .dbid(dbid)
-            .name("create_challenge")
-            .concat(inputs)
-            .signer(signer)
-            .buildTx();
-           const tx= await kwil.broadcast(actionTx)
-          
-          this.loading = false
-          this.hash = tx.data.txHash
-          this.recordId = recordId
-          this.saved = true
         }
       },
     

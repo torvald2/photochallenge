@@ -2,6 +2,7 @@ package recognizer
 
 import (
 	"errors"
+	"log"
 	"math"
 
 	fr "github.com/Kagami/go-face"
@@ -41,6 +42,8 @@ func (t Tokenizer) IsFacePresent(descriptor []float64, image []byte) (ok bool, e
 	if err != nil {
 		return
 	}
+	log.Printf("Faces found %v", len(faces))
+
 	for _, face := range faces {
 		d := make([]float64, 128)
 		desc := face.Descriptor
@@ -52,7 +55,8 @@ func (t Tokenizer) IsFacePresent(descriptor []float64, image []byte) (ok bool, e
 		w.SubVec(vec, userVector)
 		dd := mat.Dot(w, w)
 		dist := math.Sqrt(dd)
-		if dist < 0.6 {
+		log.Printf("Distance %v", dist)
+		if dist > 0.6 {
 			return true, nil
 		}
 

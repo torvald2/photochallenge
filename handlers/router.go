@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"net/http"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -76,6 +77,7 @@ func (f FaceController) IsFacesPresent(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, map[string]interface{}{"err": err.Error()})
 			return
 		}
+
 		if !ok {
 			c.JSON(http.StatusOK, map[string]interface{}{"status": "bad"})
 			return
@@ -95,6 +97,7 @@ func NewRouter(rg recognizer) *gin.Engine {
 
 	router.POST("/api/v1/recognize", fc.GetFaceDescriptors)
 	router.POST("/api/v1/compare", fc.IsFacesPresent)
+	router.Use(static.Serve("/", static.LocalFile("./dist", false)))
 
 	return router
 

@@ -21,7 +21,7 @@ func main() {
 	router := handlers.NewRouter(fr)
 
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8085",
 		Handler: router,
 	}
 
