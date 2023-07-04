@@ -146,7 +146,7 @@ export default {
       let recordId = uuidv4();
       inputs.put("$id",recordId)
       inputs.put("$faces_data", JSON.stringify(this.faces))
-      inputs.put("$desription", this.desription)
+      inputs.put("$desription", this.description)
       inputs.put("$completed",0)
       inputs.put("$complete_account","")
 

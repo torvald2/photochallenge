@@ -21,8 +21,14 @@ const routes = [
 
   },
   {
-    path: '/complete',
+    path: '/complete/:id',
     name: 'complete',
+    component: CompleteView,
+    props: true
+  },
+  {
+    path: '/complete',
+    name: 'completeok',
     component: CompleteView,
     props: true
   }

@@ -7,7 +7,7 @@ b-container
   b-row.mt-3
     b-col
       b-alert(show variant="success")
-        h1 READY TO CREATE YOUR OWN CHALLENGE? 
+        h1 {{ maintext }}
   b-row.mt-3
     b-col
       b-button(variant="success" pill size="lg" @click="connect")
@@ -23,6 +23,7 @@ import metamask from "../assets/metamask-icon.png";
 
 export default {
   name: 'Home',
+  props:["challenge"],
   components: {
   },
   data(){
@@ -40,7 +41,12 @@ export default {
          .then((accounts) => {
            const account = accounts[0]
            this.account = account
-           this.$router.push({ name: 'create', params: {account: account }})
+           if (this.challenge){
+            this.$router.push({ name: 'completeok', params: {account: account, challenge: this.challenge }})
+
+           } else {
+            this.$router.push({ name: 'create', params: {account: account }})
+           }
 
 
         }).catch((error) => {
@@ -51,6 +57,15 @@ export default {
    } else {
        window.open("https://metamask.io/download/", "_blank");
    }
+    }
+  },
+  computed: {
+    maintext() {
+        if (this.challenge) {
+            return " READY TO COMPLETE CHALLENGE ? "
+        } else {
+            return " READY TO CREATE YOUR OWN CHALLENGE?"
+        }
     }
   }
 }
