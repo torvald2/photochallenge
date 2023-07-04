@@ -94,6 +94,7 @@ func NewRouter(rg recognizer) *gin.Engine {
 	}
 
 	router.POST("/api/v1/recognize", fc.GetFaceDescriptors)
+	router.POST("/api/v1/compare", fc.IsFacesPresent)
 
 	return router
 
